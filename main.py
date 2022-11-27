@@ -6,6 +6,7 @@ agents = []
 
 for i in range(0,number_of_agents):
     skills_num = input()
+    skills_num = int(skills_num)
     distinct_skills = input()
     #print(distinct_skills)
     skills = [int(c) for c in distinct_skills.split(' ')]
@@ -15,7 +16,7 @@ for i in range(0,number_of_agents):
     agents.append([skills_num,skills, i])
 
 #this is causing the error
-agents.sort(key=lambda x: x[0]) #sorted in reverse order
+agents.sort(key=lambda x: int(x[0])) #sorted in reverse order
 
 skills_set = set()
 i =len(agents) -1
