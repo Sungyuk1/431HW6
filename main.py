@@ -174,7 +174,7 @@ def permute3(lst, _required_skills_set, _number_of_distinct_skills, f=0):
             lst[f], lst[s] = lst[s], lst[f]
 
 # make sure the change the permute at the bottom
-
+# currently the best one - gets you 240/400
 def permute4(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set, person_num, f=0):
     # put required skills into set, recurse through and check if it adds up to number of distinct_skills
 
@@ -189,7 +189,7 @@ def permute4(lst, _required_skills_set, _number_of_distinct_skills, current_skil
         # mix of list
         lst[f], lst[s] = lst[s], lst[f]
 
-        person_num = person_num + 1
+        current_skills_set2 = set(current_skills_set)
 
         # Optimization 1 - stop if the number of people is greater than the smallest number discovered so far
         if person_num >= minimum_people:
@@ -197,12 +197,88 @@ def permute4(lst, _required_skills_set, _number_of_distinct_skills, current_skil
         else:
             for j in range(0, len(lst[f])):
                 if lst[f][j] in _required_skills_set:
-                    current_skills_set.add(lst[i][j])
+                    current_skills_set2.add(lst[f][j])
 
-            if len(current_skills_set) == _number_of_distinct_skills:
+            if len(current_skills_set2) == _number_of_distinct_skills:
                 minimum_people = person_num
-            permute4(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set, person_num, f + 1)
+            permute4(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set2, person_num+1, f + 1)
             lst[f], lst[s] = lst[s], lst[f]
+
+
+def permute5(lst, _required_skills_set, _number_of_distinct_skills,person_num, current_skills_set, f=0):
+    # put required skills into set, recurse through and check if it adds up to number of distinct_skills
+
+    global minimum_people
+
+    # base case - no more swaps we can make
+    if f >= len(lst):
+        return
+
+# from 0 to length of the list
+    for s in range(f, len(lst)):
+        # mix of list
+        lst[f], lst[s] = lst[s], lst[f]
+
+        if person_num >= minimum_people:
+            return
+        else:
+            current_skills_set2 = set(current_skills_set)
+            for j in range(0, len(lst[f])):
+                if lst[f][j] in _required_skills_set:
+                    current_skills_set2.add(lst[i][j])
+
+                if len(current_skills_set2) == _number_of_distinct_skills:
+                    minimum_people = person_num
+
+            if ((len(current_skills_set2) + len(lst[f+1])) < _number_of_distinct_skills):
+                return
+            else:
+                permute3(lst, _required_skills_set, _number_of_distinct_skills, person_num + 1, current_skills_set2,
+                         f + 1)
+                lst[f], lst[s] = lst[s], lst[f]
+
+            #elif((len(current_skills_set2) + len(lst[f+1]) + len(lst[f+2])) < _number_of_distinct_skills):
+
+            permute3(lst, _required_skills_set, _number_of_distinct_skills, person_num + 1, current_skills_set2, f + 1)
+            lst[f], lst[s] = lst[s], lst[f]
+
+
+def permute6(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set, person_num, f=0):
+    # put required skills into set, recurse through and check if it adds up to number of distinct_skills
+
+    global minimum_people
+
+    # base case - no more swaps we can make
+    if f >= len(lst):
+        return
+
+# from 0 to length of the list
+    for s in range(f, len(lst)):
+        # mix of list
+        lst[f], lst[s] = lst[s], lst[f]
+
+        current_skills_set2 = set(current_skills_set)
+
+        # Optimization 1 - stop if the number of people is greater than the smallest number discovered so far
+        if person_num >= minimum_people:
+            lst[f], lst[s] = lst[s], lst[f]
+        else:
+            for j in range(0, len(lst[f])):
+                if lst[f][j] in _required_skills_set:
+                    current_skills_set2.add(lst[f][j])
+
+            if len(current_skills_set2) == _number_of_distinct_skills:
+                minimum_people = person_num
+
+            # Optimization - dont permute if it wont give you an answer
+            if f+1 < len(lst) and len(current_skills_set2) + len(lst[f+1]) < _number_of_distinct_skills:
+                return
+            elif f+2 < len(lst) and len(current_skills_set2) + len(lst[f+1]) + len(lst[f+2]) < _number_of_distinct_skills:
+                return
+            else:
+                permute6(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set2, person_num + 1,
+                         f + 1)
+                lst[f], lst[s] = lst[s], lst[f]
 
 
 
@@ -219,11 +295,12 @@ for m in agents:
 agents2.sort(key=len, reverse=True)
 
 #permute(agents2, required_skills_set, number_of_distinct_skills)
-permute3(agents2, required_skills_set, number_of_distinct_skills)
+#permute3(agents2, required_skills_set, number_of_distinct_skills)
 
-#current_skills_set = set()
-#person_num = 0
-#permute4(agents2, required_skills_set, current_skills_set, person_num, number_of_distinct_skills)
+current_skills_set = set()
+person_num = 1
+#permute4(agents2, required_skills_set, number_of_distinct_skills, current_skills_set, person_num)
+permute6(agents2, required_skills_set, number_of_distinct_skills, current_skills_set, person_num)
 
 print(minimum_people)
 
