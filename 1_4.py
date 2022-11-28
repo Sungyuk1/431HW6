@@ -157,6 +157,25 @@ def permute7(lst, _required_skills_set, _number_of_distinct_skills, current_skil
             lst[f], lst[s] = lst[s], lst[f]
 
 
+
+def backtracking2(lst, _required_skills_set, number_of_distinct_skills, current_skills_set):
+    # if the temp skill set has everything no need to go further
+    if len(current_skills_set) == number_of_distinct_skills:
+        return False
+
+    temp_skill_set = set(current_skills_set)
+
+    for s in range(0, len(lst)):
+        for i in range(0, len(lst[s])):
+            if lst[s][i] in _required_skills_set:
+                temp_skill_set.add(lst[s][i])
+
+    if len(temp_skill_set) == number_of_distinct_skills:
+        return True
+    else:
+        return False
+
+
 def permute8(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set, _person_num):
 
     global minimum_people
@@ -176,7 +195,10 @@ def permute8(lst, _required_skills_set, _number_of_distinct_skills, current_skil
 
     curr_item = lst.pop()
 
-    excluded = permute8(lst[:], _required_skills_set, _number_of_distinct_skills, current_skills_set, _person_num)
+    backtracing_result = backtracking2(lst, _required_skills_set, _number_of_distinct_skills, current_skills_set)
+    if backtracing_result:
+        excluded = permute8(lst[:], _required_skills_set, _number_of_distinct_skills, current_skills_set, _person_num)
+
 
     current_skills_set2 = set(current_skills_set)
     _person_num = _person_num + 1
@@ -189,7 +211,10 @@ def permute8(lst, _required_skills_set, _number_of_distinct_skills, current_skil
 
     included = permute8(lst[:], _required_skills_set, _number_of_distinct_skills, current_skills_set2, _person_num)
 
-    return min(included, excluded)
+    if backtracing_result:
+        return min(included, excluded)
+    else:
+        return included
 
 
 
