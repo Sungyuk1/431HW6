@@ -2,6 +2,10 @@ number_of_agents, number_of_distinct_skills = input().split()
 number_of_agents = int(number_of_agents)
 number_of_distinct_skills = int(number_of_distinct_skills)
 
+required_skills = input()
+required_skills_list = [str(i) for i in required_skills.split(' ')]
+
+#current error, have the input code for question 2 in not 1
 agents = []
 
 for i in range(0,number_of_agents):
@@ -34,7 +38,8 @@ print(agents_chosen)
 
 
 
-
+#approx is used here was get all the inputs, sort by who has the most distinct skills, and then go
+#trhough from the ones wiht the most till you have the number of distinct skills
 
 
 
